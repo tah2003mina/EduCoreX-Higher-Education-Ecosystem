@@ -1,0 +1,637 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About EduCoreX - Empowering Educational Technology students through AI, collaboration, and innovation.">
+    <meta name="keywords" content="about, educational technology, EdTech, AI platform, learning resources">
+    <meta name="author" content="EduCoreX">
+    
+    <title>About Us - EduCoreX | Empowering Educational Technology Students</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script src="{% static 'js/script.js' %}"></script>
+    
+    <style>
+        /* CSS Variables to match your palette */
+        :root {
+            --primary-bg: #0e1e2d;
+            --accent-color: #00bfa6;
+            --text-white: #ffffff;
+            --text-light-gray: #e0e0e0;
+            --shadow-hover: 0 20px 40px rgba(0, 191, 166, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="{% static 'images/logo.jpg' %}" alt="EduCoreX Logo" style="width: 40px; height: 40px; object-fit: contain;">
+            <a href="{% url 'index' %}" class="logo">EduCoreX</a>
+        </div>
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'about' %}" class="active">About</a></li>
+                <li><a href="{% url 'index' %}#features">Features</a></li>
+                <li><a href="{% url 'ai_assistant' %}">AI Assistant</a></li>
+                <li><a href="{% url 'index' %}#contact">Contact</a></li>
+                <li><a href="{% url 'login' %}">Login/Register</a></li>
+            </ul>
+            
+            <div class="menu-toggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-about">
+        <div class="hero-about-content">
+            <h2>About Us</h2>
+            <h1>EduCoreX</h1>
+            <p>The first EdTech platform developed by the Department of Educational Technology that bridges learners, mentors, and global alumni.</p>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Two-Column Layout -->
+    <section class="mission-vision">
+        <div class="mission-vision-grid">
+            <div class="mission-card">
+                <span class="icon">🎯</span>
+                <h2>Our Mission</h2>
+                <p>To make higher education more structured, accessible, and goal-oriented by providing personalized mentorship, resource-rich learning, and community engagement that empowers every student to achieve their academic and career goals.</p>
+            </div>
+            
+            <div class="vision-card">
+                <span class="icon">✨</span>
+                <h2>Our Vision</h2>
+                <p>To create a world where every learner has access to the guidance, resources, and community they need to achieve their highest potential in higher education and beyond.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Development Story Section -->
+    <section class="development-story">
+        <div class="development-content">
+            <h2>Our Story</h2>
+            <p>EduCoreX was born from the Department of Educational Technology with a singular vision: to bridge the gap between learners, mentors, and global opportunities. What started as a vision has grown into a comprehensive platform that serves hundreds of students in their higher education journey.</p>
+        </div>
+    </section>
+
+    <!-- What We Offer Section -->
+    <section class="offerings-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>What <span class="highlight">We Offer</span></h2>
+                <p>Comprehensive solutions designed for your academic success</p>
+            </div>
+            
+            <div class="offerings-grid">
+                <div class="offering-card">
+                    <div class="card-icon">🤝</div>
+                    <h3>Personalized Mentorship</h3>
+                    <p>Connect with experienced mentors and global alumni to guide your academic and career journey.</p>
+                </div>
+
+                <div class="offering-card">
+                    <div class="card-icon">📚</div>
+                    <h3>Resource-Rich Learning</h3>
+                    <p>Access curated study materials, opportunities, and insights tailored for higher education success.</p>
+                </div>
+
+                <div class="offering-card">
+                    <div class="card-icon">💬</div>
+                    <h3>Community Engagement</h3>
+                    <p>Join a vibrant forum where learners and mentors collaborate, share knowledge, and grow together.</p>
+                </div>
+
+                <div class="offering-card">
+                    <div class="card-icon">🎓</div>
+                    <h3>Higher Study Orientation</h3>
+                    <p>Navigate your path to advanced studies with structured guidance and real-world insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="why-choose-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why <span class="highlight">Choose Us</span></h2>
+                <p>Empowering learners, strengthening connections</p>
+            </div>
+            
+            <div class="why-choose-content">
+                <p class="why-text">At EduCoreX, we aim to empower learners, strengthen connections, and make higher education a purposeful and organized journey for every student.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Active Learners</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Mentors & Alumni</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Partner Institutions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Educational Journey?</h2>
+            <p>Join EduCoreX today and become part of a community that's shaping the future of educational technology.</p>
+            
+            <div class="cta-buttons">
+                <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-links">
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'index' %}#contact">Contact</a>
+            <a href="{% url 'privacy' %}">Privacy</a>
+            <a href="{% url 'terms' %}">Terms</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.9 0 3.2 1.29 3.2 3.91z"/>
+                </svg>
+            </a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.7 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/>
+                </svg>
+            </a>
+            <a href="mailto:contact@educorex.com" class="social-icon" aria-label="Email">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </a>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 EduCoreX | All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        /* ============================================
+           About Page Specific Styles - Matching Your Palette
+        ============================================ */
+        
+        body {
+            background: var(--primary-bg, #0e1e2d);
+            color: var(--text-white, #ffffff);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--text-white, #ffffff);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light-gray, #e0e0e0);
+        }
+
+        .highlight {
+            color: var(--accent-color, #00bfa6);
+        }
+
+        /* Hero Section */
+        .hero-about {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 5% 4rem;
+            background: linear-gradient(135deg, var(--primary-bg, #0e1e2d) 0%, #1a2f47 50%, var(--primary-bg, #0e1e2d) 100%);
+            overflow: hidden;
+        }
+
+        .hero-about-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-about-content h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--text-white, #ffffff), var(--accent-color, #00bfa6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-about-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color, #00bfa6);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-about-content p {
+            font-size: 1.2rem;
+            color: var(--text-light-gray, #e0e0e0);
+            line-height: 1.8;
+        }
+
+        /* Two-column Mission & Vision Layout */
+        .mission-vision {
+            padding: 6rem 5%;
+            background: var(--primary-bg, #0e1e2d);
+        }
+
+        .mission-vision-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .mission-card,
+        .vision-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mission-card:hover,
+        .vision-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent-color, #00bfa6);
+            box-shadow: var(--shadow-hover, 0 20px 40px rgba(0, 191, 166, 0.2));
+        }
+
+        .mission-card .icon,
+        .vision-card .icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(0 4px 10px rgba(0, 191, 166, 0.3));
+        }
+
+        .mission-card h2,
+        .vision-card h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color, #00bfa6);
+        }
+
+        .mission-card p,
+        .vision-card p {
+            color: var(--text-light-gray, #e0e0e0);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Development Story Section */
+        .development-story {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, rgba(0, 191, 166, 0.08), rgba(14, 30, 45, 0.5));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .development-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 4rem 3rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .development-content h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-color, #00bfa6), #00E5D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .development-content p {
+            font-size: 1.2rem;
+            color: var(--text-light-gray, #e0e0e0);
+            line-height: 1.8;
+        }
+
+        /* Offerings Section */
+        .offerings-section {
+            padding: 6rem 5%;
+            background: var(--primary-bg, #0e1e2d);
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .offering-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .offering-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color, #00bfa6);
+            box-shadow: var(--shadow-hover, 0 20px 40px rgba(0, 191, 166, 0.2));
+        }
+
+        .offering-card .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .offering-card h3 {
+            font-size: 1.3rem;
+            color: var(--accent-color, #00bfa6);
+            margin-bottom: 15px;
+        }
+
+        .offering-card p {
+            color: var(--text-light-gray, #e0e0e0);
+            line-height: 1.6;
+        }
+
+        /* Why Choose Section */
+        .why-choose-section {
+            padding: 6rem 5%;
+            background: var(--primary-bg, #0e1e2d);
+            text-align: center;
+        }
+
+        .why-text {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.2rem;
+            color: var(--text-light-gray, #e0e0e0);
+            line-height: 1.8;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color, #00bfa6);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-light-gray, #e0e0e0);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, #0e1e2d, #1a2f47);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-white, #ffffff);
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-light-gray, #e0e0e0);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent-color, #00bfa6);
+            color: var(--text-white, #ffffff);
+        }
+
+        .btn-primary:hover {
+            background: #00a08a;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover, 0 20px 40px rgba(0, 191, 166, 0.2));
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-white, #ffffff);
+            border: 2px solid var(--accent-color, #00bfa6);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color, #00bfa6);
+            color: var(--text-white, #ffffff);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a1522;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-light-gray, #e0e0e0);
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color, #00bfa6);
+        }
+
+        .social-icons {
+            margin-bottom: 20px;
+        }
+
+        .social-icon {
+            color: var(--text-light-gray, #e0e0e0);
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            color: var(--accent-color, #00bfa6);
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mission-vision-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .mission-card,
+            .vision-card {
+                padding: 2rem;
+            }
+            
+            .hero-about-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-about-content h2 {
+                font-size: 1.3rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .stats-container {
+                gap: 30px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-about-content h1 {
+                font-size: 2rem;
+            }
+            
+            .mission-card .icon,
+            .vision-card .icon {
+                font-size: 3rem;
+            }
+            
+            .development-content h2 {
+                font-size: 2rem;
+            }
+            
+            .development-content {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+    
+</body>
+</html>

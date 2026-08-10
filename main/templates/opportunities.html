@@ -1,0 +1,482 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Global Opportunities - EduCoreX{% endblock %}
+
+{% block content %}
+<style>
+    /* Override any light theme colors with your palette */
+    .dashboard-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .dashboard-card:hover {
+        border-color: #00bfa6 !important;
+        box-shadow: 0 20px 40px rgba(0, 191, 166, 0.2) !important;
+    }
+    
+    .card-title {
+        color: #00bfa6 !important;
+    }
+    
+    .card-description, p {
+        color: #e0e0e0 !important;
+    }
+    
+    .progress-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .progress-card h3 {
+        color: #00bfa6 !important;
+    }
+    
+    .search-container {
+        margin-bottom: 30px;
+        width: 100%;
+    }
+    
+    .search-form {
+        display: flex;
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .search-input {
+        flex: 1;
+        padding: 15px 20px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.03);
+        color: white;
+        font-size: 1rem;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: #00bfa6;
+    }
+    
+    .search-btn {
+        padding: 15px 30px;
+        background: #00bfa6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .search-btn:hover {
+        background: #00a08a;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.3);
+    }
+    
+    .opportunity-image {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 15px;
+    }
+    
+    .image-placeholder {
+        width: 100%;
+        height: 160px;
+        background: linear-gradient(135deg, #0e1e2d, #1a2f47);
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #00bfa6;
+    }
+    
+    .deadline {
+        font-size: 0.85rem;
+        color: #e0e0e0 !important;
+        margin: 10px 0;
+        opacity: 0.8;
+    }
+    
+    .no-link {
+        color: #666;
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+    
+    .empty-message {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 50px;
+        color: #e0e0e0;
+        font-size: 1.2rem;
+    }
+    
+    /* New styles for search suggestions */
+    .search-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #1a2f47;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-top: 5px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .suggestion-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        color: #e0e0e0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s;
+    }
+    
+    .suggestion-item:hover {
+        background: #00bfa6;
+        color: white;
+        padding-left: 25px;
+    }
+    
+    .search-loading {
+        position: absolute;
+        right: 110px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #00bfa6;
+        font-size: 0.85rem;
+        display: none;
+    }
+    
+    /* EdTech special section styles */
+    .special-section {
+        margin: 40px 0;
+    }
+    
+    .section-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .section-header h2 {
+        color: #00bfa6;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    
+    .section-header p {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+    }
+    
+    .edtech-badge {
+        background: linear-gradient(135deg, #00bfa6, #008080);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-left: 10px;
+    }
+    
+    .suggestion-group {
+        padding: 8px 15px 4px;
+        color: #00bfa6;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: rgba(0, 191, 166, 0.1);
+    }
+    
+    .suggestion-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(0,191,166,0.3), transparent);
+        margin: 5px 0;
+    }
+</style>
+
+<!-- Search Section with Live Suggestions -->
+<section class="progress-section">
+    <div class="progress-card" style="padding: 30px;">
+        <h3 style="text-align: center; margin-bottom: 20px;">🌍 Global Scholarship Hub</h3>
+        <p style="text-align: center; margin-bottom: 30px;">Verified, authentic opportunities curated by EduCoreX Admins.</p>
+        
+        <div class="search-container">
+            <form method="GET" action="{% url 'opportunities' %}" class="search-form" id="searchForm">
+                <div style="position: relative; flex: 1;">
+                    <input type="text" 
+                           name="search" 
+                           id="searchInput"
+                           class="search-input"
+                           placeholder="Search by country, university, or organization..." 
+                           value="{{ search_query }}"
+                           autocomplete="off">
+                    <div class="search-loading" id="searchLoading">Searching...</div>
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </div>
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Educational Technology Special Section - Only show when NOT searching -->
+{% if edtech_opportunities and not search_query %}
+<section class="special-section">
+    <div class="section-header">
+        <h2>💻 EdTech Special Opportunities <span class="edtech-badge">Featured</span></h2>
+        <p>Specially curated Educational Technology opportunities</p>
+    </div>
+    
+    <div class="dashboard-grid">
+        {% for opp in edtech_opportunities %}
+        <div class="dashboard-card" style="padding: 0; overflow: hidden; border-left: 4px solid #00bfa6;">
+            <!-- University Image -->
+            {% if opp.image %}
+                <img src="{{ opp.image.url }}" alt="{{ opp.title }}" class="opportunity-image">
+            {% else %}
+                <div class="image-placeholder">
+                    💻
+                </div>
+            {% endif %}
+            
+            <!-- Content -->
+            <div style="padding: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span class="card-badge" style="background: #00bfa6; color: white;">{{ opp.funding }}</span>
+                    <span style="color: #00bfa6; font-size: 0.9rem; background: rgba(0,191,166,0.1); padding: 4px 8px; border-radius: 4px;">
+                        EdTech Special
+                    </span>
+                </div>
+                
+                <h3 class="card-title" style="font-size: 1.2rem; margin-bottom: 10px;">{{ opp.title }}</h3>
+                
+                <p class="card-description" style="margin-bottom: 5px;">
+                    <strong>🏛️ {{ opp.organization }}</strong>
+                </p>
+                
+                <p class="card-description" style="margin-bottom: 5px;">
+                    <strong> {{ opp.country }}</strong>
+                </p>
+                
+                <p class="deadline">
+                    ⏰ Deadline: {{ opp.deadline|date:"M d, Y" }}
+                </p>
+                
+                <p class="card-description" style="font-size: 0.9rem; margin: 15px 0;">
+                    {{ opp.description|truncatechars:100 }}
+                </p>
+                
+                {% if opp.url %}
+                    <a href="{{ opp.url }}" target="_blank" rel="noopener noreferrer" class="card-link" style="display: inline-block; margin-top: 10px;">
+                        See Details →
+                    </a>
+                {% else %}
+                    <span class="no-link">Link coming soon</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- All Opportunities Section -->
+<section class="dashboard-content">
+    <div class="section-header" style="margin-top: {% if edtech_opportunities and not search_query %}40px{% else %}0{% endif %};">
+        <h2>{% if search_query %}Search Results for "{{ search_query }}"{% else %}All Opportunities{% endif %}</h2>
+        {% if search_query %}
+            <p><a href="{% url 'opportunities' %}" style="color: #00bfa6;">Clear search</a></p>
+        {% endif %}
+    </div>
+    
+    <div class="dashboard-grid">
+        {% for opp in opportunities %}
+        <div class="dashboard-card" style="padding: 0; overflow: hidden;">
+            <!-- University Image -->
+            {% if opp.image %}
+                <img src="{{ opp.image.url }}" alt="{{ opp.title }}" class="opportunity-image">
+            {% else %}
+                <div class="image-placeholder">
+                    🎓
+                </div>
+            {% endif %}
+            
+            <!-- Content -->
+            <div style="padding: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span class="card-badge" style="background: #00bfa6; color: white;">{{ opp.funding }}</span>
+                    <span style="color: #e0e0e0; font-size: 0.9rem;">{{ opp.opportunity_type }}</span>
+                </div>
+                
+                <h3 class="card-title" style="font-size: 1.2rem; margin-bottom: 10px;">{{ opp.title }}</h3>
+                
+                <p class="card-description" style="margin-bottom: 5px;">
+                    <strong>🏛️ {{ opp.organization }}</strong>
+                </p>
+                
+                <p class="card-description" style="margin-bottom: 5px;">
+                    <strong> {{ opp.country }}</strong>
+                </p>
+                
+                <p class="deadline">
+                    ⏰ Deadline: {{ opp.deadline|date:"M d, Y" }}
+                </p>
+                
+                <p class="card-description" style="font-size: 0.9rem; margin: 15px 0;">
+                    {{ opp.description|truncatechars:100 }}
+                </p>
+                
+                {% if opp.url %}
+                    <a href="{{ opp.url }}" target="_blank" rel="noopener noreferrer" class="card-link" style="display: inline-block; margin-top: 10px;">
+                        See Details →
+                    </a>
+                {% else %}
+                    <span class="no-link">Link coming soon</span>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-message">
+            <p>No opportunities found matching "{{ search_query }}". Check back later!</p>
+            {% if search_query %}
+                <p><a href="{% url 'opportunities' %}" style="color: #00bfa6;">Clear search</a></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsDiv = document.getElementById('searchSuggestions');
+    const loadingDiv = document.getElementById('searchLoading');
+    
+    let searchTimeout;
+    let lastQuery = '';
+    
+    // Auto-suggest as you type
+    searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.trim();
+        
+        clearTimeout(searchTimeout);
+        
+        if (query.length < 1) {
+            suggestionsDiv.style.display = 'none';
+            lastQuery = '';
+            return;
+        }
+        
+        if (query.length <= 2) {
+            loadingDiv.style.display = 'block';
+        }
+        
+        if (query === lastQuery) return;
+        
+        lastQuery = query;
+        
+        const delay = query.length <= 2 ? 100 : 200;
+        searchTimeout = setTimeout(() => {
+            fetchSuggestions(query);
+        }, delay);
+    });
+    
+    function fetchSuggestions(query) {
+        fetch(`/opportunities/suggestions/?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                loadingDiv.style.display = 'none';
+                
+                if (data.suggestions && data.suggestions.length > 0) {
+                    displaySuggestions(data.suggestions);
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loadingDiv.style.display = 'none';
+            });
+    }
+    
+    function displaySuggestions(suggestions) {
+        let html = '';
+        
+        // Group by type for better organization
+        const countries = suggestions.filter(s => s.type === 'country');
+        const edtech = suggestions.filter(s => s.type === 'edtech');
+        const orgs = suggestions.filter(s => s.type === 'organization');
+        const titles = suggestions.filter(s => s.type === 'title');
+        
+        // Countries first (fastest response)
+        if (countries.length > 0) {
+            html += `<div class="suggestion-group">🌍 Countries</div>`;
+            countries.forEach(s => {
+                html += `<div class="suggestion-item" onclick="selectSuggestion('${s.value}')">${s.label}</div>`;
+            });
+        }
+        
+        // EdTech opportunities
+        if (edtech.length > 0) {
+            if (html) html += `<div class="suggestion-divider"></div>`;
+            html += `<div class="suggestion-group">💻 EdTech Special</div>`;
+            edtech.forEach(s => {
+                html += `<div class="suggestion-item" onclick="selectSuggestion('${s.value}')">${s.label}</div>`;
+            });
+        }
+        
+        // Organizations
+        if (orgs.length > 0) {
+            if (html) html += `<div class="suggestion-divider"></div>`;
+            html += `<div class="suggestion-group">🏛️ Universities</div>`;
+            orgs.forEach(s => {
+                html += `<div class="suggestion-item" onclick="selectSuggestion('${s.value}')">${s.label}</div>`;
+            });
+        }
+        
+        // Titles
+        if (titles.length > 0) {
+            if (html) html += `<div class="suggestion-divider"></div>`;
+            html += `<div class="suggestion-group">🎓 Programs</div>`;
+            titles.forEach(s => {
+                html += `<div class="suggestion-item" onclick="selectSuggestion('${s.value}')">${s.label}</div>`;
+            });
+        }
+        
+        suggestionsDiv.innerHTML = html;
+        suggestionsDiv.style.display = 'block';
+    }
+    
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+            suggestionsDiv.style.display = 'none';
+        }
+    });
+});
+
+// Global function for suggestion click
+window.selectSuggestion = function(value) {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.value = value;
+    document.getElementById('searchSuggestions').style.display = 'none';
+    document.getElementById('searchForm').submit();
+};
+</script>
+{% endblock %}

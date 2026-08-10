@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Assistant - EduCoreX</title>
+    
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/ai_assistant.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="{% static 'images/logo.jpg' %}" alt="EduCoreX" onerror="this.style.display='none';">
+                <a href="{% url 'index' %}" class="logo-text">EduCoreX</a>
+            </div>
+            <div class="nav-menu">
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'resources' %}">Resources</a>
+                <a href="{% url 'opportunities' %}">Opportunities</a>
+                <a href="{% url 'alumni' %}">Alumni</a>
+                <a href="{% url 'forum' %}">Forum</a>
+            </div>
+            <div class="user-menu">
+                <span class="user-name">{{ user.full_name }}</span>
+                <div class="user-avatar">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="{{ user.full_name }}">
+                    {% else %}
+                        <div class="avatar-placeholder">{{ user.full_name|first|upper }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- AI Assistant Container -->
+    <div class="ai-container">
+        <!-- Sidebar - Chat History -->
+        <div class="history-sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-history"></i> Chat History</h3>
+                <button class="new-chat-btn" onclick="startNewChat()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="history-list" id="historyList">
+                {% if history %}
+                    {% for chat in history %}
+                    <div class="history-item" onclick="loadChat({{ chat.id }})">
+                        <div class="history-item-title">{{ chat.query|truncatechars:30 }}</div>
+                        <div class="history-item-meta">
+                            <span><i class="far fa-clock"></i> {{ chat.created_at|timesince }} ago</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-history">
+                        <i class="fas fa-comments"></i>
+                        <p>No chat history yet</p>
+                        <small>Start a conversation with AI Assistant</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-main">
+            <div class="chat-header">
+                <h1><span>🤖 AI</span> Study Assistant</h1>
+                <p>Your 24/7 academic support companion</p>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-message">
+                    <i class="fas fa-robot"></i>
+                    <h2>Hello, {{ user.full_name }}! 👋</h2>
+                    <p>I'm your AI Study Assistant. I only answer questions related to this platform. Ask me about SOP guidelines, professional messages, research help, career advice, and other academic topics!</p>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="quickAction('sop')">
+                            <i class="fas fa-file-alt"></i> SOP Guidelines
+                        </button>
+                        <button class="quick-action-btn" onclick="quickAction('gm')">
+                            <i class="fas fa-envelope"></i> Professional GM
+                        </button>
+                        <button class="quick-action-btn" onclick="quickAction('research')">
+                            <i class="fas fa-flask"></i> Research Help
+                        </button>
+                        <button class="quick-action-btn" onclick="quickAction('career')">
+                            <i class="fas fa-briefcase"></i> Career Advice
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+                    <div class="input-actions">
+                        <button class="action-btn" onclick="attachFile()">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="{% url 'index' %}#contact">Contact</a>
+                <a href="{% url 'privacy' %}">Privacy</a>
+                <a href="{% url 'terms' %}">Terms</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 EduCoreX | All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/ai_assistant.js' %}"></script>
+</body>
+</html>

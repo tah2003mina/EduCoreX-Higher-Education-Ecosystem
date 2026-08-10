@@ -1,0 +1,819 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Override with your color palette */
+    .forum-standard-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px 20px 40px;
+        color: #ffffff;
+    }
+
+    /* Navbar-style Header - Matching Opportunities page */
+    .forum-page-header {
+        background: linear-gradient(135deg, #0e1e2d, #1a2f47);
+        padding: 40px 20px;
+        text-align: center;
+        color: white;
+        border-radius: 0 0 20px 10px;
+        margin-bottom: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .forum-page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="40" fill="none" stroke="%2300bfa6" stroke-width="2"/></svg>') repeat;
+        animation: rotate 60s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .header-content h1 { 
+        font-size: 2.8rem; 
+        font-weight: 700; 
+        margin: 0 0 10px; 
+        color: #ffffff;
+    }
+    
+    .header-content p { 
+        color: #e0e0e0; 
+        font-size: 1.2rem; 
+        margin: 0;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Search/Button Section - Matching Opportunities page style */
+    .action-section {
+        padding: 30px 20px;
+        background: #0e1e2d;
+        margin-bottom: 30px;
+    }
+
+    .action-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .btn-primary-standard {
+        background: #00bfa6;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        box-shadow: 0 4px 6px rgba(0, 191, 166, 0.2);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-primary-standard:hover {
+        background: #00a08a;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.3);
+    }
+
+    .btn-primary-standard svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Grid System */
+    .forum-grid-standard {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 40px;
+    }
+
+    /* Composer / "What's on your mind" Box */
+    .composer-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-bottom: 10px;
+    }
+
+    .composer-card:hover { 
+        background: rgba(255, 255, 255, 0.06);
+        border-color: #00bfa6;
+    }
+
+    .avatar-placeholder {
+        width: 40px; 
+        height: 40px;
+        background: #00bfa6;
+        color: white;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .composer-prompt { 
+        color: #e0e0e0; 
+        font-size: 1rem; 
+    }
+
+    /* Navigation Tabs */
+    .forum-nav-tabs {
+        display: flex;
+        gap: 25px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        padding: 12px 0;
+        color: #e0e0e0;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        position: relative;
+        transition: 0.2s;
+    }
+
+    .tab:hover {
+        color: #00bfa6;
+    }
+
+    .tab.active { color: #00bfa6; }
+    .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; 
+        left: 0; 
+        width: 100%;
+        height: 2px; 
+        background: #00bfa6;
+    }
+
+    /* Post Entry Styling */
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .post-entry {
+        padding: 25px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        transition: all 0.3s;
+    }
+
+    .post-entry:hover {
+        border-color: #00bfa6;
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.1);
+    }
+
+    .post-meta-top { 
+        font-size: 0.85rem; 
+        color: #e0e0e0; 
+        margin-bottom: 12px; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        flex-wrap: wrap;
+    }
+    
+    .author-name {
+        font-weight: 600;
+        color: #00bfa6;
+    }
+
+    .dot-separator {
+        color: #4a5568;
+    }
+
+    .category-tag {
+        background: rgba(0, 191, 166, 0.15);
+        color: #00bfa6;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+
+    .post-heading { 
+        font-size: 1.3rem; 
+        margin-bottom: 12px; 
+        font-weight: 600; 
+        line-height: 1.4;
+        color: #ffffff;
+    }
+    
+    .post-excerpt { 
+        color: #e0e0e0; 
+        line-height: 1.6; 
+        font-size: 0.95rem; 
+        margin-bottom: 15px; 
+    }
+
+    /* Image Display within Post */
+    .post-image-frame {
+        width: 100%;
+        max-height: 300px;
+        overflow: hidden;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .post-img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+    }
+
+    /* Interactions */
+    .post-interactions { 
+        display: flex; 
+        gap: 25px; 
+        border-top: 1px solid rgba(255, 255, 255, 0.05); 
+        padding-top: 15px; 
+        margin-top: 10px;
+    }
+    
+    .interaction-btn {
+        background: transparent; 
+        border: none;
+        color: #e0e0e0; 
+        font-size: 0.9rem;
+        display: flex; 
+        align-items: center; 
+        gap: 8px; 
+        cursor: pointer; 
+        transition: 0.2s;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
+    
+    .interaction-btn:hover { 
+        color: #00bfa6;
+        background: rgba(0, 191, 166, 0.1);
+    }
+
+    /* Modal Design */
+    .modal-backdrop {
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%;
+        background: rgba(14, 30, 45, 0.95); 
+        backdrop-filter: blur(8px);
+        z-index: 1000; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        padding: 20px;
+    }
+
+    .modal-window { 
+        width: 100%; 
+        max-width: 600px; 
+        padding: 30px;
+        background: #0e1e2d;
+        border: 1px solid #00bfa6;
+        border-radius: 16px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .modal-header h2 {
+        color: #ffffff;
+        font-size: 1.6rem;
+        margin: 0;
+    }
+
+    .close-modal-btn {
+        background: transparent;
+        border: none;
+        color: #e0e0e0;
+        font-size: 2.5rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s;
+    }
+
+    .close-modal-btn:hover {
+        color: #00bfa6;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Form Styling */
+    .professional-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .professional-form input,
+    .professional-form select,
+    .professional-form textarea {
+        width: 100%;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+    }
+
+    .professional-form input:focus,
+    .professional-form select:focus,
+    .professional-form textarea:focus {
+        outline: none;
+        border-color: #00bfa6;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .professional-form select option {
+        background: #0e1e2d;
+        color: white;
+    }
+
+    /* Custom File Upload Button */
+    .file-upload-section { 
+        margin: 20px 0; 
+        display: flex; 
+        align-items: center; 
+        gap: 15px; 
+        flex-wrap: wrap;
+    }
+    
+    .file-input-label {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px 20px; 
+        border-radius: 8px;
+        cursor: pointer; 
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem; 
+        display: flex; 
+        align-items: center; 
+        gap: 8px;
+        color: #e0e0e0;
+        transition: all 0.2s;
+    }
+
+    .file-input-label:hover {
+        border-color: #00bfa6;
+        background: rgba(0, 191, 166, 0.1);
+    }
+    
+    input[type="file"] { display: none; }
+    
+    #file-chosen { 
+        font-size: 0.9rem; 
+        color: #e0e0e0; 
+    }
+
+    .form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .checkbox-container {
+        color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        width: auto;
+        margin-right: 5px;
+        accent-color: #00bfa6;
+    }
+
+    /* Sidebar */
+    .forum-sidebar-standard {
+        position: sticky;
+        top: 20px;
+        align-self: start;
+    }
+
+    .sidebar-widget {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .sidebar-widget h3 { 
+        font-size: 1rem; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        color: #00bfa6; 
+        margin: 0 0 15px;
+        font-weight: 600;
+    }
+    
+    .standard-list { 
+        padding: 0; 
+        margin: 0;
+        list-style: none; 
+        font-size: 0.95rem; 
+        color: #e0e0e0; 
+        line-height: 2; 
+    }
+    
+    .standard-list li {
+        position: relative;
+        padding-left: 20px;
+    }
+
+    .standard-list li::before {
+        content: "•";
+        color: #00bfa6;
+        position: absolute;
+        left: 0;
+        font-size: 1.2rem;
+    }
+
+    .tag-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .minimal-tag {
+        display: inline-block; 
+        padding: 6px 14px;
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px; 
+        font-size: 0.85rem; 
+        color: #e0e0e0; 
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .minimal-tag:hover {
+        border-color: #00bfa6;
+        background: rgba(0, 191, 166, 0.1);
+        color: #00bfa6;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #e0e0e0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .empty-state .btn-primary-standard {
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    /* Featured Partner */
+    .featured-partner {
+        text-align: center;
+        padding: 20px;
+        background: rgba(0, 191, 166, 0.05);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 191, 166, 0.2);
+    }
+
+    .partner-icon {
+        font-size: 2.5rem;
+        color: #00bfa6;
+        margin-bottom: 10px;
+    }
+
+    .partner-name {
+        color: #00bfa6;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .partner-role {
+        color: #e0e0e0;
+        font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .header-content h1 {
+            font-size: 2.2rem;
+        }
+
+        .header-content p {
+            font-size: 1rem;
+        }
+
+        .action-container {
+            flex-direction: column;
+        }
+
+        .btn-primary-standard {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .forum-grid-standard {
+            grid-template-columns: 1fr;
+        }
+
+        .forum-sidebar-standard {
+            position: static;
+            margin-top: 30px;
+        }
+
+        .post-meta-top {
+            font-size: 0.8rem;
+        }
+
+        .post-heading {
+            font-size: 1.2rem;
+        }
+
+        .post-interactions {
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .modal-window {
+            padding: 20px;
+        }
+
+        .file-upload-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .file-input-label {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .forum-standard-container {
+            padding: 15px;
+        }
+
+        .header-content h1 {
+            font-size: 1.8rem;
+        }
+
+        .composer-card {
+            padding: 12px;
+        }
+
+        .avatar-placeholder {
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
+        }
+
+        .post-entry {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="forum-standard-container">
+    
+    <!-- Hero Header - Matching Opportunities page -->
+    <header class="forum-page-header">
+        <div class="header-content">
+        <h1 style="font-size: 2.2rem; margin-bottom: 10px;"> 💬Community Discussions</h1>
+        <p style="font-size: 1rem; max-width: 500px; margin: 0 auto; opacity: 0.9;">Engage with global peers to share expertise and resolve academic challenges.</p>
+    </div>
+</header>
+        </div>
+    </header>
+
+    <!-- Action Section with Start Discussion Button - Matching Search bar position -->
+    <section class="action-section">
+        <div class="action-container">
+            <button class="btn-primary-standard" onclick="openPostModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Start Discussion
+            </button>
+        </div>
+    </section>
+
+    <div class="forum-grid-standard">
+        
+        <main class="forum-feed">
+            
+            <div class="composer-card" onclick="openPostModal()">
+                <div class="avatar-placeholder">{{ user.username|first|upper }}</div>
+                <div class="composer-prompt">What would you like to discuss, {{ user.username }}?</div>
+            </div>
+
+            <nav class="forum-nav-tabs">
+                <a href="?type=" class="tab {% if not selected_type %}active{% endif %}">All Activity</a>
+                {% for type_val, type_label in post_types %}
+                    <a href="?type={{ type_val }}" class="tab {% if selected_type == type_val %}active{% endif %}">{{ type_label }}</a>
+                {% endfor %}
+            </nav>
+
+            <div class="post-list">
+                {% for post in posts %}
+                <article class="post-entry">
+                    <div class="post-meta-top">
+                        <span class="author-name">{% if post.is_anonymous %}Anonymous Member{% else %}{{ post.author.username }}{% endif %}</span>
+                        <span class="dot-separator">•</span>
+                        <span class="post-timestamp">{{ post.created_at|timesince }} ago</span>
+                        <span class="category-tag">{{ post.post_type }}</span>
+                    </div>
+                    
+                    <h2 class="post-heading">{{ post.title }}</h2>
+                    <p class="post-excerpt">{{ post.content|truncatechars:200 }}</p>
+
+                    {% if post.image %}
+                    <div class="post-image-frame">
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-img">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="post-interactions">
+                        <button class="interaction-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 9l-5 5 5 5V9z"/>
+                            </svg>
+                            Upvote ({{ post.helpful_count }})
+                        </button>
+                        <button class="interaction-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            {{ post.replies.count }} Comments
+                        </button>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="empty-state">
+                    <p>No discussions found. Start the first one to help the community.</p>
+                    <button class="btn-primary-standard" onclick="openPostModal()">Start a Discussion</button>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+
+        <aside class="forum-sidebar-standard">
+            <div class="sidebar-widget">
+                <h3>Forum Etiquette</h3>
+                <ul class="standard-list">
+                    <li>Maintain professional tone</li>
+                    <li>Be specific with your queries</li>
+                    <li>Cite sources when providing answers</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-widget">
+                <h3>Trending Tags</h3>
+                <div class="tag-group">
+                    <span class="minimal-tag">#Scholarship</span>
+                    <span class="minimal-tag">#IELTS</span>
+                    <span class="minimal-tag">#StudyAbroad</span>
+                    <span class="minimal-tag">#Research</span>
+                </div>
+            </div>
+
+            </div>
+        </aside>
+    </div>
+</div>
+
+<div id="createPostModal" class="modal-backdrop" style="display:none;">
+    <div class="modal-window">
+        <div class="modal-header">
+            <h2>Start Discussion</h2>
+            <button class="close-modal-btn" onclick="closePostModal()">&times;</button>
+        </div>
+        
+        <form method="POST" action="{% url 'forum' %}" enctype="multipart/form-data" class="professional-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <input type="text" name="title" placeholder="Discussion Title" required>
+            </div>
+
+            <div class="form-group">
+                <select name="post_type">
+                    {% for val, label in post_types %}
+                        <option value="{{ val }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <textarea name="content" rows="6" placeholder="Describe your topic in detail..." required></textarea>
+            </div>
+
+            <div class="file-upload-section">
+                <label for="id_image" class="file-input-label">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Add Image (Optional)
+                </label>
+                <input type="file" name="image" id="id_image" accept="image/*" onchange="previewFile()">
+                <span id="file-chosen">No file selected</span>
+            </div>
+
+            <div class="form-footer">
+                <label class="checkbox-container">
+                    <input type="checkbox" name="is_anonymous"> Post anonymously
+                </label>
+                <button type="submit" class="btn-primary-standard">Publish Discussion</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openPostModal() { 
+        document.getElementById('createPostModal').style.display = 'flex'; 
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closePostModal() { 
+        document.getElementById('createPostModal').style.display = 'none'; 
+        document.body.style.overflow = 'auto';
+    }
+    
+    function previewFile() {
+        const file = document.getElementById('id_image').files[0];
+        document.getElementById('file-chosen').innerText = file ? file.name : "No file selected";
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('createPostModal');
+        if (event.target == modal) {
+            closePostModal();
+        }
+    }
+</script>
+{% endblock %}

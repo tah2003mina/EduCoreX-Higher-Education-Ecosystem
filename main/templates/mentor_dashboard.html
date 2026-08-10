@@ -1,0 +1,1142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Dashboard - EduCoreX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* All your existing CSS remains the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0E1E2D;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #0E1E2D;
+            padding: 1rem 5%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00BFA6;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #E5E5E5;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #00BFA6;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-name {
+            color: #FFFFFF;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #00BFA6;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #00BFA6;
+            color: #0E1E2D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: flex;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: linear-gradient(180deg, #0E1E2D 0%, #1a2f47 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 0;
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .sidebar-header h2 {
+            color: #00BFA6;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header p {
+            color: #B8B8B8;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .mentor-profile {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0 20px 30px;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .mentor-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            border: 3px solid #00BFA6;
+        }
+
+        .mentor-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-large-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00BFA6, #00E5D4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #0E1E2D;
+        }
+
+        .mentor-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 5px;
+        }
+
+        .mentor-title {
+            color: #00BFA6;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .mentor-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(0, 191, 166, 0.15);
+            border: 1px solid rgba(0, 191, 166, 0.3);
+            border-radius: 20px;
+            color: #00BFA6;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .mentor-stats-mini {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-mini {
+            text-align: center;
+        }
+
+        .stat-mini .number {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00BFA6;
+        }
+
+        .stat-mini .label {
+            font-size: 0.75rem;
+            color: #B8B8B8;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            padding: 0 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #E5E5E5;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            background: none;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #FFFFFF;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 191, 166, 0.15);
+            color: #00BFA6;
+            border-left: 4px solid #00BFA6;
+        }
+
+        .nav-item i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .notification-badge {
+            margin-left: auto;
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 320px;
+            padding: 30px;
+        }
+
+        /* Header Stats */
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 191, 166, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00BFA6;
+            font-size: 1.5rem;
+        }
+
+        .header-stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            line-height: 1;
+        }
+
+        .header-stat-info p {
+            color: #B8B8B8;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* Dashboard Sections */
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: #FFFFFF;
+        }
+
+        .section-header h2 i {
+            color: #00BFA6;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background: #00BFA6;
+            border: none;
+            border-radius: 8px;
+            color: #0E1E2D;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #00a08a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #E5E5E5;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            color: #00BFA6;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-all-link {
+            color: #00BFA6;
+            text-decoration: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Activity List */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .activity-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .activity-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #00BFA6;
+            color: #0E1E2D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details h4 {
+            font-size: 0.95rem;
+            color: #FFFFFF;
+            margin-bottom: 3px;
+        }
+
+        .activity-details p {
+            font-size: 0.8rem;
+            color: #B8B8B8;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: #B8B8B8;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.15);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .status-accepted {
+            background: rgba(0, 191, 166, 0.15);
+            color: #00BFA6;
+            border: 1px solid rgba(0, 191, 166, 0.3);
+        }
+
+        /* Mentees List */
+        .mentees-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .mentee-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mentee-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .mentee-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .mentee-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #00BFA6;
+            color: #0E1E2D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .mentee-info h4 {
+            color: #FFFFFF;
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .mentee-info p {
+            color: #B8B8B8;
+            font-size: 0.8rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(14, 30, 45, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #0E1E2D;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            border: 1px solid #00BFA6;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #00BFA6, #00E5D4);
+            color: #0E1E2D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #0E1E2D;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #E5E5E5;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00BFA6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: #00BFA6;
+            color: #0E1E2D;
+            font-weight: 600;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a1522;
+            padding: 2rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-left: 320px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: #B8B8B8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: #00BFA6;
+        }
+
+        .copyright {
+            color: #B8B8B8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 280px;
+            }
+            .footer {
+                margin-left: 280px;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .footer {
+                margin-left: 0;
+            }
+            .dashboard-layout {
+                flex-direction: column;
+            }
+            .nav-menu {
+                display: none;
+            }
+            .header-stats {
+                grid-template-columns: 1fr;
+            }
+            .mentees-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="{% static 'images/logo.jpg' %}" alt="EduCoreX" onerror="this.style.display='none';">
+                <a href="{% url 'index' %}" class="logo-text">EduCoreX</a>
+            </div>
+            <div class="nav-menu">
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'resources' %}">Resources</a>
+                <a href="{% url 'opportunities' %}">Opportunities</a>
+                <a href="{% url 'alumni' %}" class="active">Alumni</a>
+                <a href="{% url 'forum' %}">Forum</a>
+            </div>
+            <div class="user-menu">
+                <span class="user-name">{{ user.full_name }}</span>
+                <div class="user-avatar">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="{{ user.full_name }}">
+                    {% else %}
+                        <div class="avatar-placeholder">{{ user.full_name|first|upper }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-graduation-cap"></i> Mentor Portal</h2>
+                <p>Guide. Inspire. Empower.</p>
+            </div>
+
+            <div class="mentor-profile">
+                <div class="mentor-avatar-large">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="{{ user.full_name }}">
+                    {% else %}
+                        <div class="avatar-large-placeholder">{{ user.full_name|first|upper }}</div>
+                    {% endif %}
+                </div>
+                <h3 class="mentor-name">{{ user.full_name }}</h3>
+                <p class="mentor-title">{{ profile.organization|default:"Independent Mentor" }}</p>
+                <span class="mentor-badge"><i class="fas fa-star"></i> Mentor</span>
+                <div class="mentor-stats-mini">
+                    <div class="stat-mini">
+                        <span class="number">{{ total_mentees|default:"0" }}</span>
+                        <span class="label">Mentees</span>
+                    </div>
+                    <div class="stat-mini">
+                        <span class="number">4.9</span>
+                        <span class="label">Rating</span>
+                    </div>
+                    <div class="stat-mini">
+                        <span class="number">{{ pending_count|default:"0" }}</span>
+                        <span class="label">Requests</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="showSection('overview')">
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </button>
+                <button class="nav-item" onclick="showSection('mentees')">
+                    <i class="fas fa-users"></i> My Mentees
+                </button>
+                <button class="nav-item" onclick="showSection('requests')">
+                    <i class="fas fa-handshake"></i> Requests
+                    {% if pending_count > 0 %}
+                        <span class="notification-badge">{{ pending_count }}</span>
+                    {% endif %}
+                </button>
+                <button class="nav-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header Stats -->
+            <div class="header-stats">
+                <div class="header-stat-card">
+                    <div class="header-stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="header-stat-info">
+                        <h3>{{ total_mentees|default:"0" }}</h3>
+                        <p>Active Mentees</p>
+                    </div>
+                </div>
+                <div class="header-stat-card">
+                    <div class="header-stat-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="header-stat-info">
+                        <h3>{{ pending_count|default:"0" }}</h3>
+                        <p>Pending Requests</p>
+                    </div>
+                </div>
+                <div class="header-stat-card">
+                    <div class="header-stat-icon"><i class="fas fa-star"></i></div>
+                    <div class="header-stat-info">
+                        <h3>4.9</h3>
+                        <p>Avg. Rating</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="dashboard-section active">
+                <div class="dashboard-grid">
+                    <!-- Pending Requests -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-clock"></i> Pending Requests</h3>
+                            <span class="view-all-link" onclick="showSection('requests')">View All</span>
+                        </div>
+                        <div class="activity-list">
+                            {% for request in pending_requests %}
+                            <div class="activity-item">
+                                <div class="activity-avatar">
+                                    <div class="activity-avatar-placeholder">{{ request.student.full_name|first|upper }}</div>
+                                </div>
+                                <div class="activity-details">
+                                    <h4>{{ request.student.full_name }}</h4>
+                                    <p>{{ request.message|truncatechars:50 }}</p>
+                                </div>
+                                <span class="status-badge status-pending">Pending</span>
+                                <span class="activity-time">{{ request.created_at|timesince }} ago</span>
+                            </div>
+                            {% empty %}
+                            <div class="activity-item">
+                                <div class="activity-details">
+                                    <p>No pending requests</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Recent Mentees -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user-friends"></i> Recent Mentees</h3>
+                            <span class="view-all-link" onclick="showSection('mentees')">View All</span>
+                        </div>
+                        <div class="activity-list">
+                            {% for mentee in accepted_mentees %}
+                            <div class="activity-item">
+                                <div class="activity-avatar">
+                                    <div class="activity-avatar-placeholder">{{ mentee.student.full_name|first|upper }}</div>
+                                </div>
+                                <div class="activity-details">
+                                    <h4>{{ mentee.student.full_name }}</h4>
+                                    <p>Active since {{ mentee.updated_at|date:"M Y" }}</p>
+                                </div>
+                                <span class="status-badge status-accepted">Active</span>
+                            </div>
+                            {% empty %}
+                            <div class="activity-item">
+                                <div class="activity-details">
+                                    <p>No mentees yet</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mentees Section -->
+            <div id="mentees" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> My Mentees</h2>
+                </div>
+                <div class="mentees-list">
+                    {% for mentee in accepted_mentees %}
+                    <div class="mentee-card">
+                        <div class="mentee-avatar">
+                            <div class="mentee-avatar-placeholder">{{ mentee.student.full_name|first|upper }}</div>
+                        </div>
+                        <div class="mentee-info">
+                            <h4>{{ mentee.student.full_name }}</h4>
+                            <p>Since {{ mentee.updated_at|date:"M Y" }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="mentee-card">
+                        <div class="mentee-info">
+                            <p>No mentees yet</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Requests Section -->
+            <div id="requests" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-handshake"></i> Mentorship Requests</h2>
+                </div>
+                <div class="activity-list">
+                    {% for request in pending_requests %}
+                    <div class="activity-item">
+                        <div class="activity-avatar">
+                            <div class="activity-avatar-placeholder">{{ request.student.full_name|first|upper }}</div>
+                        </div>
+                        <div class="activity-details">
+                            <h4>{{ request.student.full_name }}</h4>
+                            <p>{{ request.message }}</p>
+                            <small>{{ request.created_at|timesince }} ago</small>
+                        </div>
+                        <span class="status-badge status-pending">Pending</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-primary" style="padding: 5px 15px;" onclick="acceptRequest('{{ request.id }}')">Accept</button>
+                            <button class="btn-secondary" style="padding: 5px 15px;" onclick="rejectRequest('{{ request.id }}')">Decline</button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="activity-item">
+                        <div class="activity-details">
+                            <p>No pending requests</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                </div>
+                <div class="card">
+                    <h3 style="color: #00BFA6; margin-bottom: 20px;">Profile Settings</h3>
+                    <form method="POST" action="{% url 'update_mentor_profile' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="full_name" value="{{ user.full_name }}" class="readonly-field" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" value="{{ user.email }}" readonly class="readonly-field">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Expertise</label>
+                            <input type="text" name="expertise" value="{{ profile.expertise|default:'' }}" placeholder="e.g., AI/ML, Career Guidance">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Years of Experience</label>
+                            <input type="number" name="experience_years" value="{{ profile.experience_years|default:'' }}" placeholder="e.g., 5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Organization</label>
+                            <input type="text" name="organization" value="{{ profile.organization|default:'' }}" placeholder="e.g., Tech Solutions Inc.">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea name="bio" rows="4" placeholder="Tell students about yourself">{{ profile.bio|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Profile Photo</label>
+                            <input type="file" name="profile_image" accept="image/*">
+                            {% if user.profile_image %}
+                                <p style="margin-top: 10px; color: #B8B8B8;">Current: {{ user.profile_image.name }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="{% url 'index' %}#contact">Contact</a>
+                <a href="{% url 'privacy' %}">Privacy</a>
+                <a href="{% url 'terms' %}">Terms</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 EduCoreX | All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function acceptRequest(requestId) {
+            fetch(`/api/mentor/mentorship-requests/${requestId}/accept/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Request accepted successfully!');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                }
+            });
+        }
+
+        function rejectRequest(requestId) {
+            fetch(`/api/mentor/mentorship-requests/${requestId}/reject/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Request rejected');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                }
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

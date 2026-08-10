@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - EduCoreX Resources{% endblock %}
+
+{% block content %}
+<style>
+    .category-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 20px 40px;
+        color: #ffffff;
+    }
+
+    .category-header-detail {
+        background: linear-gradient(135deg, #0e1e2d, #1a2f47);
+        padding: 50px 20px;
+        border-radius: 16px;
+        margin-bottom: 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .category-header-detail::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="40" fill="none" stroke="%2300bfa6" stroke-width="2"/></svg>') repeat;
+        animation: rotate 60s linear infinite;
+    }
+
+    .category-icon-large {
+        font-size: 4rem;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .category-header-detail h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #ffffff;
+        position: relative;
+        z-index: 1;
+    }
+
+    .category-header-detail p {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #00bfa6;
+        text-decoration: none;
+        font-size: 0.95rem;
+    }
+
+    .back-link:hover {
+        color: #ffffff;
+    }
+
+    .resource-count {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #e0e0e0;
+        font-size: 1rem;
+    }
+
+    .resource-count span {
+        color: #00bfa6;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .resource-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .resource-card:hover {
+        transform: translateY(-5px);
+        border-color: #00bfa6;
+        box-shadow: 0 15px 30px rgba(0, 191, 166, 0.15);
+    }
+
+    .resource-icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .resource-type-badge {
+        display: inline-block;
+        background: rgba(0, 191, 166, 0.15);
+        color: #00bfa6;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .resource-card h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+
+    .resource-description {
+        color: #e0e0e0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .resource-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+        color: #a0a0a0;
+    }
+
+    .resource-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #00bfa6;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        padding: 8px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        width: 100%;
+    }
+
+    .resource-link:hover {
+        color: #ffffff;
+        gap: 12px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        grid-column: 1 / -1;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .category-header-detail h1 {
+            font-size: 2rem;
+        }
+        
+        .resource-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="category-detail-container">
+    <a href="{% url 'resources' %}" class="back-link">← Back to all resources</a>
+
+    <div class="category-header-detail">
+        <div class="category-icon-large">{{ category.icon }}</div>
+        <h1>{{ category.name }}</h1>
+        {% if category.description %}
+        <p>{{ category.description }}</p>
+        {% endif %}
+    </div>
+
+    <div class="resource-count">
+        Showing <span>{{ resources.count }}</span> resource{{ resources.count|pluralize }} in this category
+    </div>
+
+    <div class="resource-grid">
+        {% for resource in resources %}
+        <div class="resource-card">
+            <div class="resource-icon">{{ resource.get_display_icon }}</div>
+            <span class="resource-type-badge">{{ resource.get_resource_type_display }}</span>
+            <h3>{{ resource.title }}</h3>
+            <p class="resource-description">{{ resource.description|truncatechars:100 }}</p>
+            <div class="resource-meta">
+                <span>👁️ {{ resource.views_count }} views</span>
+                {% if resource.is_free %}
+                <span style="color: #00bfa6;">Free</span>
+                {% else %}
+                <span style="color: #ffd700;">Premium</span>
+                {% endif %}
+            </div>
+            {% if resource.file %}
+            <a href="{{ resource.file.url }}" class="resource-link" download>
+                Download Resource <span>→</span>
+            </a>
+            {% elif resource.external_link %}
+            <a href="{{ resource.external_link }}" target="_blank" class="resource-link">
+                Access Resource <span>→</span>
+            </a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <p>No resources available in this category yet. Check back soon!</p>
+            <a href="{% url 'resources' %}" style="color: #00bfa6; text-decoration: none;">Browse other categories →</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

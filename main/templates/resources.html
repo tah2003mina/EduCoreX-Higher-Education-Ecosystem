@@ -1,0 +1,679 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resource Hub - EduCoreX{% endblock %}
+
+{% block content %}
+<style>
+    /* Resource Page Specific Styles */
+    .resource-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 20px 42px;
+        color: #ffffff;
+    }
+
+    /* Hero Header */
+    .resource-hero {
+        background: linear-gradient(135deg, #0e1e2d, #1a2f47);
+        padding: 40px 20px;
+        text-align: center;
+        border-radius: 0 0 20px 20px;
+        margin-bottom: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .resource-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="40" fill="none" stroke="%2300bfa6" stroke-width="2"/></svg>') repeat;
+        animation: rotate 60s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-icon {
+        font-size: 4rem;
+        margin-bottom: 15px;
+        color: #00bfa6;
+    }
+
+    .resource-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #ffffff;
+    }
+
+    .resource-hero p {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* Featured Resources Section */
+    .featured-section {
+        margin-bottom: 50px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .section-header h2 span {
+        color: #00bfa6;
+    }
+
+    .section-header a {
+        color: #00bfa6;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .section-header a:hover {
+        color: #ffffff;
+    }
+
+    /* Resource Grid */
+    .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .resource-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 25px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .resource-card:hover {
+        transform: translateY(-5px);
+        border-color: #00bfa6;
+        box-shadow: 0 15px 30px rgba(0, 191, 166, 0.15);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .resource-card.featured::before {
+        content: '⭐ Featured';
+        position: absolute;
+        top: 12px;
+        right: -30px;
+        background: #00bfa6;
+        color: white;
+        padding: 5px 30px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        transform: rotate(45deg);
+        z-index: 1;
+    }
+
+    .resource-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        background: rgba(0, 191, 166, 0.1);
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 191, 166, 0.2);
+    }
+
+    .resource-type-badge {
+        display: inline-block;
+        background: rgba(0, 191, 166, 0.15);
+        color: #00bfa6;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+    }
+
+    .resource-card h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+
+    .resource-description {
+        color: #e0e0e0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .resource-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+        color: #a0a0a0;
+    }
+
+    .resource-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .resource-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #00bfa6;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        padding: 8px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        width: 100%;
+    }
+
+    .resource-link:hover {
+        color: #ffffff;
+        gap: 12px;
+    }
+
+    /* Category Sections */
+    .category-section {
+        margin-bottom: 60px;
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .category-icon {
+        font-size: 2.2rem;
+        background: rgba(0, 191, 166, 0.1);
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 191, 166, 0.2);
+    }
+
+    .category-title h3 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 5px;
+    }
+
+    .category-title p {
+        color: #e0e0e0;
+        font-size: 0.95rem;
+    }
+
+    /* Future Plan Section */
+    .future-plan-section {
+        background: linear-gradient(135deg, rgba(0, 191, 166, 0.1), rgba(14, 30, 45, 0.5));
+        border-radius: 20px;
+        padding: 50px 30px;
+        margin: 60px 0 30px;
+        text-align: center;
+        border: 1px solid rgba(0, 191, 166, 0.2);
+    }
+
+    .future-plan-section h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+
+    .future-plan-section h2 span {
+        color: #00bfa6;
+    }
+
+    .future-plan-section p {
+        color: #e0e0e0;
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto 40px;
+        line-height: 1.8;
+    }
+
+    .future-courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .future-course-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s;
+    }
+
+    .future-course-card:hover {
+        border-color: #00bfa6;
+        transform: translateY(-3px);
+    }
+
+    .future-course-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .future-course-card h4 {
+        color: #ffffff;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .future-course-card p {
+        color: #00bfa6;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .empty-state p {
+        color: #e0e0e0;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .resource-hero h1 {
+            font-size: 2rem;
+        }
+
+        .resource-hero p {
+            font-size: 1rem;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .category-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .resource-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .future-plan-section h2 {
+            font-size: 1.6rem;
+        }
+
+        .future-courses-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="resource-container">
+    
+    <!-- Hero Header -->
+    <section class="resource-hero">
+        <div class="hero-content">
+            <div class="hero-icon">📚</div>
+            <h1>Academic Resource Hub</h1>
+            <p>Your complete guide to higher studies, research, and academic excellence - all in one structured place.</p>
+        </div>
+    </section>
+
+    <!-- Featured Resources Section -->
+    {% if featured_resources %}
+    <section class="featured-section">
+        <div class="section-header">
+            <h2>Featured <span>Resources</span></h2>
+            <a href="#all-resources">View All →</a>
+        </div>
+        
+        <div class="resource-grid">
+            {% for resource in featured_resources %}
+            <div class="resource-card featured">
+                <div class="resource-icon">{{ resource.get_display_icon }}</div>
+                <span class="resource-type-badge">{{ resource.get_resource_type_display }}</span>
+                <h3>{{ resource.title }}</h3>
+                <p class="resource-description">{{ resource.description|truncatechars:100 }}</p>
+                <div class="resource-meta">
+                    <span>👁️ {{ resource.views_count }} views</span>
+                    {% if resource.is_free %}
+                    <span style="color: #00bfa6;">Free</span>
+                    {% else %}
+                    <span style="color: #ffd700;">Premium</span>
+                    {% endif %}
+                </div>
+                {% if resource.file %}
+                <a href="{{ resource.file.url }}" class="resource-link" download>
+                    Download Resource <span>→</span>
+                </a>
+                {% elif resource.external_link %}
+                <a href="{{ resource.external_link }}" target="_blank" class="resource-link">
+                    Access Resource <span>→</span>
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Category Sections -->
+    {% for category in categories %}
+    <section class="category-section" id="category-{{ category.id }}">
+        <div class="category-header">
+            <div class="category-icon">{{ category.icon }}</div>
+            <div class="category-title">
+                <h3>{{ category.name }}</h3>
+                {% if category.description %}
+                <p>{{ category.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% with resources=category.resources.all %}
+            {% if resources %}
+            <div class="resource-grid">
+                {% for resource in resources|slice:":6" %}
+                <div class="resource-card">
+                    <div class="resource-icon">{{ resource.get_display_icon }}</div>
+                    <span class="resource-type-badge">{{ resource.get_resource_type_display }}</span>
+                    <h3>{{ resource.title }}</h3>
+                    <p class="resource-description">{{ resource.description|truncatechars:80 }}</p>
+                    <div class="resource-meta">
+                        <span>👁️ {{ resource.views_count }} views</span>
+                        {% if resource.is_free %}
+                        <span style="color: #00bfa6;">Free</span>
+                        {% endif %}
+                    </div>
+                    {% if resource.file %}
+                    <a href="{{ resource.file.url }}" class="resource-link" download>
+                        Download <span>→</span>
+                    </a>
+                    {% elif resource.external_link %}
+                    <a href="{{ resource.external_link }}" target="_blank" class="resource-link">
+                        Access <span>→</span>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% if resources.count > 6 %}
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" style="color: #00bfa6; text-decoration: none;">View all {{ resources.count }} resources →</a>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+                <p>No resources available in this category yet. Check back soon!</p>
+            </div>
+            {% endif %}
+        {% endwith %}
+    </section>
+    {% empty %}
+    <!-- Static content if no categories in database -->
+    <!-- Study Abroad Section -->
+    <section class="category-section">
+        <div class="category-header">
+            <div class="category-icon">🌍</div>
+            <div class="category-title">
+                <h3>Study Abroad & Global Opportunities</h3>
+                <p>Prepare for international higher studies with confidence</p>
+            </div>
+        </div>
+        
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div class="resource-icon">📘</div>
+                <span class="resource-type-badge">Guide</span>
+                <h3>IELTS Preparation Guide</h3>
+                <p class="resource-description">Complete guide to IELTS exam pattern, tips, and practice strategies.</p>
+                <div class="resource-meta">
+                    <span>👁️ 1.2k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access Resource <span>→</span></a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">📝</div>
+                <span class="resource-type-badge">Template</span>
+                <h3>SOP Writing Template</h3>
+                <p class="resource-description">Structured template for Statement of Purpose with examples.</p>
+                <div class="resource-meta">
+                    <span>👁️ 856 views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Download <span>→</span></a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">✉️</div>
+                <span class="resource-type-badge">Template</span>
+                <h3>Professor Email Templates</h3>
+                <p class="resource-description">Professional email templates for contacting professors.</p>
+                <div class="resource-meta">
+                    <span>👁️ 2.1k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Download <span>→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research & Thesis Section -->
+    <section class="category-section">
+        <div class="category-header">
+            <div class="category-icon">🔬</div>
+            <div class="category-title">
+                <h3>Research & Thesis Guidance</h3>
+                <p>Support for undergraduate and postgraduate research</p>
+            </div>
+        </div>
+        
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div class="resource-icon">📄</div>
+                <span class="resource-type-badge">Guide</span>
+                <h3>Literature Review Guide</h3>
+                <p class="resource-description">How to write a comprehensive literature review.</p>
+                <div class="resource-meta">
+                    <span>👁️ 654 views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access <span>→</span></a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">📋</div>
+                <span class="resource-type-badge">Template</span>
+                <h3>Research Proposal Format</h3>
+                <p class="resource-description">Standard format for research proposals.</p>
+                <div class="resource-meta">
+                    <span>👁️ 987 views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Download <span>→</span></a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">📚</div>
+                <span class="resource-type-badge">Guide</span>
+                <h3>APA Referencing Guide</h3>
+                <p class="resource-description">Complete guide to APA 7th edition referencing.</p>
+                <div class="resource-meta">
+                    <span>👁️ 1.5k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access <span>→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Excellence Section -->
+    <section class="category-section">
+        <div class="category-header">
+            <div class="category-icon">🎯</div>
+            <div class="category-title">
+                <h3>Academic Excellence & CGPA Improvement</h3>
+                <p>Strategies to boost your academic performance</p>
+            </div>
+        </div>
+        
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div class="resource-icon">⏰</div>
+                <span class="resource-type-badge">Guide</span>
+                <h3>Time Management Techniques</h3>
+                <p class="resource-description">Effective time management strategies for students.</p>
+                <div class="resource-meta">
+                    <span>👁️ 3.2k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access <span>→</span></a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">📝</div>
+                <span class="resource-type-badge">Guide</span>
+                <h3>Smart Note-Taking Methods</h3>
+                <p class="resource-description">Cornell, mind mapping, and digital note-taking techniques.</p>
+                <div class="resource-meta">
+                    <span>👁️ 1.8k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access <span>→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Development Section -->
+    <section class="category-section">
+        <div class="category-header">
+            <div class="category-icon">💼</div>
+            <div class="category-title">
+                <h3>Career & Professional Development</h3>
+                <p>Prepare for your professional journey</p>
+            </div>
+        </div>
+        
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div class="resource-icon">🔗</div>
+                <span class="resource-type-badge">Guide</span>
+                <h3>LinkedIn Profile Optimization</h3>
+                <p class="resource-description">Tips to create a standout LinkedIn profile.</p>
+                <div class="resource-meta">
+                    <span>👁️ 2.5k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access <span>→</span></a>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">📄</div>
+                <span class="resource-type-badge">Template</span>
+                <h3>Internship Application Guide</h3>
+                <p class="resource-description">How to find and apply for internships.</p>
+                <div class="resource-meta">
+                    <span>👁️ 1.1k views</span>
+                    <span style="color: #00bfa6;">Free</span>
+                </div>
+                <a href="#" class="resource-link">Access <span>→</span></a>
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+
+    <!-- Future Plan Section -->
+    <section class="future-plan-section">
+        <h2>Coming <span>Soon</span></h2>
+        <p>We're developing premium courses and mentorship programs to take your learning to the next level</p>
+        
+        <div class="future-courses-grid">
+            <div class="future-course-card">
+                <div class="future-course-icon">📘</div>
+                <h4>IELTS Masterclass</h4>
+                <p>Premium Course</p>
+            </div>
+            <div class="future-course-card">
+                <div class="future-course-icon">📊</div>
+                <h4>GRE Prep Course</h4>
+                <p>Premium Course</p>
+            </div>
+            <div class="future-course-card">
+                <div class="future-course-icon">🔬</div>
+                <h4>Research Methodology</h4>
+                <p>Premium Course</p>
+            </div>
+            <div class="future-course-card">
+                <div class="future-course-icon">🎓</div>
+                <h4>Thesis Mentorship</h4>
+                <p>Mentorship Program</p>
+            </div>
+            <div class="future-course-card">
+                <div class="future-course-icon">⚡</div>
+                <h4>Academic Bootcamp</h4>
+                <p>Success Program</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,887 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Alumni & Mentorship Network - EduCoreX{% endblock %}
+
+{% block content %}
+<style>
+    /* More specific overrides for base.html elements */
+    body .dashboard-header,
+    body header.dashboard-header,
+    body .dashboard-header * {
+        display: none !important;
+    }
+    
+    body .dashboard-footer,
+    body footer.dashboard-footer,
+    body .dashboard-footer * {
+        display: none !important;
+    }
+    
+    /* Override any conflicting heading styles from base */
+    body h1, body h2, body h3, body h4, body h5, body h6 {
+        background: none;
+        -webkit-background-clip: unset;
+        -webkit-text-fill-color: unset;
+        color: inherit;
+    }
+    
+    /* Ensure main content area is properly adjusted */
+    .dashboard-main {
+        margin-left: 280px !important;
+        padding: 0 !important;
+        background: #0E1E2D;
+        min-height: 100vh;
+        width: calc(100% - 280px) !important;
+    }
+
+    /* Remove any potential conflicting styles from base */
+    .dashboard-main .container,
+    .dashboard-main section,
+    .dashboard-main div {
+        all: unset;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    /* Custom styles for alumni page - matching forum page exactly */
+    .alumni-standard-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0;
+        color: #ffffff;
+    }
+
+    /* Navbar-style Header - EXACT MATCH with forum page */
+    .alumni-page-header {
+        background: linear-gradient(135deg, #0e1e2d, #1a2f47);
+        padding: 40px 20px;
+        text-align: center;
+        color: white;
+        border-radius: 0 0 20px 10px;
+        margin-bottom: 1px;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        display: block;
+    }
+
+    .alumni-page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="40" fill="none" stroke="%2300bfa6" stroke-width="2"/></svg>') repeat;
+        animation: rotate 60s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .alumni-header-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .alumni-header-content h1 { 
+        font-size: 2.8rem; 
+        font-weight: 700; 
+        margin: 0 0 10px; 
+        color: #ffffff;
+        background: none;
+        -webkit-background-clip: unset;
+        -webkit-text-fill-color: unset;
+        line-height: 1.2;
+    }
+    
+    .alumni-header-content p { 
+        color: #e0e0e0; 
+        font-size: 1.2rem; 
+        margin: 0;
+        max-width: 1400px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    /* Action Section - Matching forum page */
+    .alumni-action-section {
+        padding: 30px 20px;
+        background: #0e1e2d;
+        margin-bottom: 30px;
+        width: 100%;
+        display: block;
+    }
+
+    .alumni-action-container {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    /* Tabs - Matching forum page style */
+    .alumni-nav-tabs {
+        display: flex;
+        gap: 25px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        flex-wrap: wrap;
+        padding: 0 20px;
+    }
+
+    .alumni-tab {
+        padding: 12px 0;
+        color: #e0e0e0;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        position: relative;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+
+    .alumni-tab:hover {
+        color: #00bfa6;
+    }
+
+    .alumni-tab.active { 
+        color: #00bfa6; 
+    }
+    
+    .alumni-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; 
+        left: 0; 
+        width: 100%;
+        height: 2px; 
+        background: #00bfa6;
+    }
+
+    /* Search Section - Matching forum action section */
+    .alumni-search-section {
+        padding: 20px 20px 30px;
+        background: #0e1e2d;
+    }
+
+    .alumni-search-box {
+        display: flex;
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .alumni-search-input {
+        flex: 1;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #FFFFFF;
+        font-size: 0.95rem;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .alumni-search-input:focus {
+        outline: none;
+        border-color: #00bfa6;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .alumni-search-btn {
+        padding: 15px 30px;
+        background: #00bfa6;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        box-shadow: 0 4px 6px rgba(0, 191, 166, 0.2);
+    }
+
+    .alumni-search-btn:hover {
+        background: #00a08a;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.3);
+    }
+
+    /* Main Content Container */
+    .alumni-main-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px 40px;
+    }
+
+    .alumni-section-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #ffffff;
+        padding: 0 20px;
+    }
+
+    .alumni-section-title span {
+        color: #00bfa6;
+    }
+
+    /* ===== FIXED GRID AND CARD STYLES WITH TOP-RIGHT BUTTON ===== */
+    .alumni-profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px !important;
+        margin-bottom: 50px;
+        padding: 0 20px;
+    }
+
+    .alumni-profile-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 45px 20px 20px 20px;  /* Extra top padding for buttons */
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 380px !important;  /* FIXED HEIGHT for all cards */
+        margin: 0 !important;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .alumni-profile-card:hover {
+        border-color: #00bfa6;
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.1);
+        transform: translateY(-5px);
+    }
+
+    /* View Profile button at top-right */
+    .alumni-view-profile-btn-top {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 4px 10px;
+        background: transparent;
+        border: 1px solid #00bfa6;
+        border-radius: 4px;
+        color: #00bfa6;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.7rem;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .alumni-view-profile-btn-top:hover {
+        background: #00bfa6;
+        color: #0e1e2d;
+    }
+
+    /* Badge at top-left */
+    .alumni-profile-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        z-index: 2;
+    }
+
+    .alumni-badge-mentor {
+        background: rgba(0, 191, 166, 0.15);
+        color: #00bfa6;
+        border: 1px solid rgba(0, 191, 166, 0.3);
+    }
+
+    .alumni-badge-alumni {
+        background: rgba(255, 215, 0, 0.15);
+        color: #FFD700;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .alumni-profile-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        overflow: hidden;
+        border: 3px solid #00bfa6;
+        flex-shrink: 0;
+    }
+
+    .alumni-profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .alumni-avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: #00bfa6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #0e1e2d;
+    }
+
+    .alumni-profile-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0 0 5px 0;
+        text-align: center;
+        line-height: 1.3;
+        height: 45px;  /* FIXED HEIGHT */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .alumni-profile-title {
+        color: #00bfa6;
+        font-weight: 500;
+        font-size: 0.85rem;
+        margin: 0 0 5px 0;
+        text-align: center;
+        line-height: 1.4;
+        height: 40px;  /* FIXED HEIGHT */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .alumni-profile-org {
+        color: #e0e0e0;
+        font-size: 0.8rem;
+        margin-bottom: 15px;
+        text-align: center;
+        min-height: 35px;
+        line-height: 1.4;
+        height: 35px;  /* FIXED HEIGHT */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .alumni-profile-expertise {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 15px;
+        justify-content: center;
+        min-height: 50px;
+        height: 50px;  /* FIXED HEIGHT */
+        overflow: hidden;
+    }
+
+    .alumni-expertise-tag {
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        font-size: 0.7rem;
+        color: #e0e0e0;
+        white-space: nowrap;
+    }
+
+    /* Remove old footer button */
+    .alumni-profile-footer {
+        display: none !important;
+    }
+
+    /* Posts Section */
+    .alumni-posts-section {
+        margin-top: 40px;
+        padding: 0 20px;
+    }
+
+    .alumni-posts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .alumni-posts-header h2 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    .alumni-view-all-link {
+        color: #00bfa6;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+    }
+
+    .alumni-view-all-link:hover {
+        color: #00a08a;
+    }
+
+    .alumni-posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    .alumni-post-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .alumni-post-card:hover {
+        border-color: #00bfa6;
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.1);
+    }
+
+    .alumni-post-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .alumni-author-avatar-small {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #00bfa6;
+        flex-shrink: 0;
+    }
+
+    .alumni-author-avatar-small img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .alumni-avatar-small-placeholder {
+        width: 100%;
+        height: 100%;
+        background: #00bfa6;
+        color: #0e1e2d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .alumni-author-info {
+        flex: 1;
+    }
+
+    .alumni-author-info h4 {
+        color: #00bfa6;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+        font-weight: 600;
+    }
+
+    .alumni-author-info p {
+        color: #e0e0e0;
+        font-size: 0.75rem;
+    }
+
+    .alumni-post-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 8px;
+    }
+
+    .alumni-post-excerpt {
+        color: #e0e0e0;
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .alumni-post-meta {
+        display: flex;
+        gap: 20px;
+        color: #e0e0e0;
+        font-size: 0.8rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 12px;
+    }
+
+    .alumni-post-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .alumni-post-meta i {
+        color: #00bfa6;
+    }
+
+    .alumni-empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #e0e0e0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        grid-column: 1 / -1;
+    }
+
+    .alumni-empty-state i {
+        font-size: 2.5rem;
+        color: #00bfa6;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .alumni-empty-state h3 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: #ffffff;
+    }
+
+    .alumni-empty-state p {
+        color: #e0e0e0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dashboard-main {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+        
+        .alumni-header-content h1 {
+            font-size: 2.2rem;
+        }
+
+        .alumni-header-content p {
+            font-size: 1rem;
+        }
+
+        .alumni-action-container {
+            flex-direction: column;
+            padding: 0 20px;
+        }
+
+        .alumni-search-box {
+            flex-direction: column;
+        }
+
+        .alumni-search-btn {
+            width: 100%;
+        }
+
+        .alumni-profile-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 0 15px;
+        }
+        
+        .alumni-profile-card {
+            height: 360px !important;
+            padding: 40px 15px 15px 15px;
+        }
+
+        .alumni-posts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .alumni-nav-tabs {
+            padding: 0 20px;
+            gap: 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .alumni-header-content h1 {
+            font-size: 1.8rem;
+        }
+
+        .alumni-profile-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .alumni-profile-card {
+            height: 350px !important;
+        }
+    }
+</style>
+
+<div class="alumni-standard-container">
+    <!-- Hero Header -->
+    <header class="alumni-page-header">
+        <div class="alumni-header-content">
+            <h1>🎓 Alumni & Mentorship Network</h1>
+            <p>Connect with experienced professionals and mentors who can guide your academic and career journey</p>
+        </div>
+    </header>
+
+    <!-- Action Section -->
+    <section class="alumni-action-section">
+        <div class="alumni-action-container">
+            <div class="alumni-search-box">
+                <form method="GET" style="display: flex; gap: 10px; width: 100%;">
+                    <input type="text" name="search" class="alumni-search-input" 
+                           placeholder="Search by name, expertise, or company..." 
+                           value="{{ search_query|default:'' }}">
+                    {% if current_filter %}
+                        <input type="hidden" name="filter" value="{{ current_filter }}">
+                    {% endif %}
+                    <button type="submit" class="alumni-search-btn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="alumni-nav-tabs">
+        <a href="?filter=all{% if search_query %}&search={{ search_query }}{% endif %}" 
+           class="alumni-tab {% if current_filter == 'all' or not current_filter %}active{% endif %}">
+            All
+        </a>
+        <a href="?filter=mentors{% if search_query %}&search={{ search_query }}{% endif %}" 
+           class="alumni-tab {% if current_filter == 'mentors' %}active{% endif %}">
+            Mentors
+        </a>
+        <a href="?filter=alumni{% if search_query %}&search={{ search_query }}{% endif %}" 
+           class="alumni-tab {% if current_filter == 'alumni' %}active{% endif %}">
+            Alumni
+        </a>
+        <a href="?filter=posts" 
+           class="alumni-tab {% if current_filter == 'posts' %}active{% endif %}">
+            Posts
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="alumni-main-container">
+        <!-- Profiles Section -->
+        <div id="profiles-section" {% if current_filter == 'posts' %}style="display: none;"{% endif %}>
+            <h2 class="alumni-section-title">
+                {% if current_filter == 'mentors' %}
+                    Featured <span>Mentors</span>
+                {% elif current_filter == 'alumni' %}
+                    Featured <span>Alumni</span>
+                {% else %}
+                    Featured <span>Mentors & Alumni</span>
+                {% endif %}
+            </h2>
+            
+            <!-- Profiles Grid - FIXED CARDS with View Profile at Top-Right -->
+            <div class="alumni-profile-grid" id="profiles-grid">
+                {% for profile in profiles %}
+                <div class="alumni-profile-card">
+                    <!-- View Profile Button at Top-Right -->
+                    <a href="{% url 'alumni_detail_view' profile.user.id %}" class="alumni-view-profile-btn-top">View Profile →</a>
+                    
+                    <!-- Badge at Top-Left -->
+                    <span class="alumni-profile-badge {% if profile.role == 'mentor' %}alumni-badge-mentor{% else %}alumni-badge-alumni{% endif %}">
+                        {{ profile.role|title }}
+                    </span>
+                    
+                    <!-- Avatar -->
+                    <div class="alumni-profile-avatar">
+                        {% if profile.user.profile_image %}
+                            <img src="{{ profile.user.profile_image.url }}" alt="{{ profile.user.full_name }}">
+                        {% else %}
+                            <div class="alumni-avatar-placeholder">
+                                {% if profile.user.full_name %}
+                                    {{ profile.user.full_name|slice:":2"|upper }}
+                                {% else %}
+                                    ?
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Name -->
+                    <h3 class="alumni-profile-name">
+                        {% if profile.user.full_name %}
+                            {{ profile.user.full_name }}
+                        {% else %}
+                            Alumni Member
+                        {% endif %}
+                    </h3>
+                    
+                    <!-- Title -->
+                    <p class="alumni-profile-title">
+                        {% if profile.role == 'mentor' %}
+                            {% if profile.expertise %}
+                                {{ profile.expertise|truncatechars:30 }}
+                            {% else %}
+                                Mentor
+                            {% endif %}
+                        {% else %}
+                            {% if profile.current_title %}
+                                {{ profile.current_title }}
+                            {% else %}
+                                Alumni
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                    
+                    <!-- Organization -->
+                    <p class="alumni-profile-org">
+                        {% if profile.role == 'mentor' %}
+                            {% if profile.organization %}
+                                {{ profile.organization }}
+                            {% elif profile.university %}
+                                {{ profile.university }}
+                            {% else %}
+                                Education Professional
+                            {% endif %}
+                        {% else %}
+                            {% if profile.current_company %}
+                                {{ profile.current_company }}
+                            {% elif profile.university %}
+                                {{ profile.university }}
+                            {% else %}
+                                Alumni Network
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                    
+                    <!-- Expertise Tags -->
+                    <div class="alumni-profile-expertise">
+                        {% if profile.expertise %}
+                            {% for exp in profile.expertise.split|slice:":3" %}
+                                <span class="alumni-expertise-tag">{{ exp|truncatechars:12 }}</span>
+                            {% endfor %}
+                        {% elif profile.industry %}
+                            <span class="alumni-expertise-tag">{{ profile.industry|truncatechars:15 }}</span>
+                        {% else %}
+                            <span class="alumni-expertise-tag">Education</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Empty footer (no button here anymore) -->
+                    <div class="alumni-profile-footer"></div>
+                </div>
+                {% empty %}
+                <div class="alumni-empty-state">
+                    <i class="fas fa-users"></i>
+                    <h3>
+                        {% if current_filter == 'mentors' %}
+                            No mentors found
+                        {% elif current_filter == 'alumni' %}
+                            No alumni found
+                        {% else %}
+                            No mentors or alumni found
+                        {% endif %}
+                    </h3>
+                    <p>Check back later or try a different search</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Posts Section -->
+        <div id="posts-section" class="alumni-posts-section" {% if current_filter != 'posts' %}style="display: none;"{% endif %}>
+            <div class="alumni-posts-header">
+                <h2>📝 Recent <span style="color: #00bfa6;">Posts</span></h2>
+                {% if current_filter != 'posts' %}
+                <a href="?filter=posts" class="alumni-view-all-link">View All Posts →</a>
+                {% endif %}
+            </div>
+
+            <div class="alumni-posts-grid" id="posts-grid">
+                {% for post in posts %}
+                <div class="alumni-post-card">
+                    <div class="alumni-post-author">
+                        <div class="alumni-author-avatar-small">
+                            {% if post.author.profile_image %}
+                                <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.user.full_name }}">
+                            {% else %}
+                                <div class="alumni-avatar-small-placeholder">{{ post.author.user.full_name|first|upper }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="alumni-author-info">
+                            <h4>{{ post.author.user.full_name }}</h4>
+                            <p>
+                                {% if post.author.is_mentor %}Mentor{% else %}Alumni{% endif %} 
+                                • {{ post.created_at|timesince }} ago
+                            </p>
+                        </div>
+                    </div>
+                    <h3 class="alumni-post-title">{{ post.title }}</h3>
+                    <p class="alumni-post-excerpt">{{ post.content|truncatechars:100 }}</p>
+                    <div class="alumni-post-meta">
+                        <span><i class="far fa-comment"></i> {{ post.comments.count }}</span>
+                        <span><i class="far fa-heart"></i> {{ post.likes.count }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alumni-empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No posts yet</h3>
+                    <p>Mentors and alumni haven't posted anything yet</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filter = urlParams.get('filter');
+        
+        // Handle tab switching
+        if (filter === 'posts') {
+            document.getElementById('profiles-section').style.display = 'none';
+            document.getElementById('posts-section').style.display = 'block';
+        } else {
+            document.getElementById('profiles-section').style.display = 'block';
+            document.getElementById('posts-section').style.display = 'none';
+        }
+        
+        // Add click handlers for tabs
+        document.querySelectorAll('.alumni-tab').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                const urlParams = new URLSearchParams(href.split('?')[1]);
+                const filter = urlParams.get('filter');
+                
+                if (filter === 'posts') {
+                    e.preventDefault();
+                    document.getElementById('profiles-section').style.display = 'none';
+                    document.getElementById('posts-section').style.display = 'block';
+                    
+                    // Update active tab
+                    document.querySelectorAll('.alumni-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update URL without reload
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('filter', 'posts');
+                    window.history.pushState({}, '', url);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

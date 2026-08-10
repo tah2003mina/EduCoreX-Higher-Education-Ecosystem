@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your EduCoreX account and join the future of smart education.">
+    <title>Register - EduCoreX | Create Your Account</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/auth.js' %}" defer></script>
+</head>
+<body>
+
+    <header id="header">
+        <a href="{% url 'index' %}" class="logo">EduCoreX</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="register-section">
+        <div class="register-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="register-header">
+                <h1>Create Your Account</h1>
+                <p>Join EduCoreX and start your educational journey today</p>
+            </div>
+
+            <form class="register-form" id="registerForm" method="POST" action="{% url 'register' %}" novalidate>
+                {% csrf_token %}
+                
+                <!-- Display form errors -->
+                {% if form.errors %}
+                    <div class="form-errors">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <div class="error-message">{{ error }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="full_name" class="form-label">Full Name</label>
+                    {{ form.full_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    {{ form.email }}
+                </div>
+
+                <!-- Role Selection Buttons -->
+                <div class="form-group">
+                    <label class="form-label">Select Your Role</label>
+                    <div class="role-button-group">
+                        <button type="button" class="role-btn" data-role="student">
+                            <span class="role-icon">🎓</span>
+                            <span class="role-text">Student</span>
+                        </button>
+                        <button type="button" class="role-btn" data-role="mentor">
+                            <span class="role-icon">🤝</span>
+                            <span class="role-text">Mentor</span>
+                        </button>
+                        <button type="button" class="role-btn" data-role="alumni">
+                            <span class="role-icon">🚀</span>
+                            <span class="role-text">Alumni</span>
+                        </button>
+                    </div>
+                    {{ form.role }}
+                </div>
+
+                <!-- Student Fields (Hidden by default) -->
+                <div id="student-fields" class="role-fields" style="display: none;">
+                    <h3 class="role-subtitle">Student Information</h3>
+                    <div class="form-group">
+                        <label class="form-label">University / Institution</label>
+                        {{ form.university }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Department / Major</label>
+                        {{ form.department }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Current Semester</label>
+                        {{ form.semester }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Academic/Professional Interests</label>
+                        {{ form.interests }}
+                    </div>
+                </div>
+
+                <!-- Mentor Fields (Hidden by default) -->
+                <div id="mentor-fields" class="role-fields" style="display: none;">
+                    <h3 class="role-subtitle">Mentor Expertise</h3>
+                    <div class="form-group">
+                        <label class="form-label">Primary Area of Expertise</label>
+                        {{ form.expertise }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Years of Experience</label>
+                        {{ form.experience_years }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Current Organization</label>
+                        {{ form.organization }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Mentoring Mode</label>
+                        {{ form.mentoring_mode }}
+                    </div>
+                </div>
+
+                <!-- Alumni Fields (Hidden by default) -->
+                <div id="alumni-fields" class="role-fields" style="display: none;">
+                    <h3 class="role-subtitle">Alumni Career Tracking</h3>
+                    <div class="form-group">
+                        <label class="form-label">Graduation Year</label>
+                        {{ form.grad_year }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Current Company / Organization</label>
+                        {{ form.current_company }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Industry Field</label>
+                        {{ form.industry }}
+                    </div>
+                    <div class="form-group checkbox-group">
+                        {{ form.willing_to_mentor }}
+                        <label for="{{ form.willing_to_mentor.id_for_label }}">Willing to mentor current students?</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    {{ form.password }}
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    {{ form.confirm_password }}
+                </div>
+
+                <button type="submit" class="btn-register">Create Account</button>
+            </form>
+        </div>
+    </section>
+     {% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+    <!-- Footer remains same as before -->
+    <footer id="contact">
+        <div class="footer-links">
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'index' %}#contact">Contact</a>
+            <a href="{% url 'privacy' %}">Privacy</a>
+            <a href="{% url 'terms' %}">Terms</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="https://linkedin.com" target="_blank" class="social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.9 0 3.2 1.29 3.2 3.91z"/></svg>
+            </a>
+            <a href="mailto:contact@educorex.com" class="social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+        </div>
+        <div class="copyright"><p>&copy; 2025 EduCoreX | All Rights Reserved.</p></div>
+    </footer>
+</body>
+</html>

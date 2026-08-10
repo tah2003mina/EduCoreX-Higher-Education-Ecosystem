@@ -1,0 +1,204 @@
+<!-- send_message.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Send Message to {{ recipient.user.full_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .message-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .message-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 30px;
+    }
+    
+    .message-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .message-header h1 {
+        color: #00bfa6;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+    
+    .message-header p {
+        color: #e0e0e0;
+    }
+    
+    .recipient-info {
+        background: rgba(0, 191, 166, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .recipient-avatar-small {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #00bfa6;
+        overflow: hidden;
+    }
+    
+    .recipient-avatar-small img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .recipient-avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: #00bfa6;
+        color: #0e1e2d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    
+    .recipient-details h3 {
+        color: #ffffff;
+        margin-bottom: 5px;
+    }
+    
+    .recipient-details p {
+        color: #00bfa6;
+        font-size: 0.9rem;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        color: #ffffff;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: #ffffff;
+        font-size: 1rem;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #00bfa6;
+    }
+    
+    textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .btn-submit {
+        background: #00bfa6;
+        color: #0e1e2d;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn-submit:hover {
+        background: #00a08a;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 191, 166, 0.3);
+    }
+    
+    .errorlist {
+        color: #ff6b6b;
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0;
+        font-size: 0.9rem;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #00bfa6;
+        text-decoration: none;
+    }
+    
+    .back-link i {
+        margin-right: 5px;
+    }
+</style>
+
+<div class="message-container">
+    <a href="{% url 'alumni_detail_view' recipient.id %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Profile
+    </a>
+    
+    <div class="message-card">
+        <div class="message-header">
+            <h1>Send Message</h1>
+            <p>Reach out to {{ recipient.user.full_name }}</p>
+        </div>
+        
+        <div class="recipient-info">
+            <div class="recipient-avatar-small">
+                {% if recipient.profile_image %}
+                    <img src="{{ recipient.profile_image.url }}" alt="{{ recipient.user.full_name }}">
+                {% else %}
+                    <div class="recipient-avatar-placeholder">
+                        {{ recipient.user.full_name|slice:":2"|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="recipient-details">
+                <h3>{{ recipient.user.full_name }}</h3>
+                <p>{{ recipient.current_title|default:recipient.industry }}</p>
+            </div>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <ul class="errorlist">
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-submit">
+                <i class="far fa-paper-plane" style="margin-right: 10px;"></i>
+                Send Message
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
